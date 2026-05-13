@@ -303,5 +303,17 @@ app.add_handler(CommandHandler("risk", risk))
 app.add_handler(CommandHandler("session", session))
 app.add_handler(CommandHandler("news", news))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, auto_reply))
+from flask import Flask
+from threading import Thread
 
+web = Flask(__name__)
+
+@web.route('/')
+def home():
+    return "Bot is running!"
+
+def run_web():
+    web.run(host="0.0.0.0", port=10000)
+
+Thread(target=run_web).start()
 app.run_polling(drop_pending_updates=True)
