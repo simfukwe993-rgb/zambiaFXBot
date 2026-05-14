@@ -164,59 +164,62 @@ strength = random.choice([
         "Moderate 📊",
         "Strong 💪"
 ])
+strength = random.choice([
+    "Weak ⚠️",
+    "Moderate 📊",
+    "Strong 💪"
+])
 
-    # --- adaptive timeframe logic ---
-    if volatility >= 80:
-        timeframe = "1–3 min"
-        confidence = random.randint(60, 72)
+volatility = random.randint(30, 100)
 
-    elif volatility >= 60:
-        timeframe = "3–5 min"
-        confidence = random.randint(70, 80)
+# --- adaptive timeframe logic ---
+if volatility >= 80:
+    timeframe = "1-3 min"
+    confidence = random.randint(60, 72)
 
-    elif volatility >= 40:
-        timeframe = "5–10 min"
-        confidence = random.randint(78, 86)
+elif volatility >= 60:
+    timeframe = "3-5 min"
+    confidence = random.randint(70, 80)
 
-    else:
-        timeframe = "10–15 min"
-        confidence = random.randint(82, 92)
+elif volatility >= 40:
+    timeframe = "5-10 min"
+    confidence = random.randint(78, 86)
+    
+# --- RSI logic ---
+if rsi <= 30:
+    rsi_state = "Oversold"
+elif rsi >= 70:
+     rsi_state = "Overbought"
+else:
+    rsi_state = "Neutral"
 
-    # --- RSI logic ---
-    if rsi <= 30:
-        rsi_state = "Oversold"
-    elif rsi >= 70:
-        rsi_state = "Overbought"
-    else:
-        rsi_state = "Neutral"
+# --- trend direction ---
+if trend == "Bullish 📈":
+    direction = "BUY ↑"
+else:
+    direction = "SELL ↓"
 
-    # --- trend direction ---
-    if trend == "Bullish 📈":
-        direction = "BUY ↑"
-    else:
-        direction = "SELL ↓"
-
-    # --- FILTER SYSTEM (NEW LEVEL 6 CORE) ---
+# --- FILTER SYSTEM (NEW LEVEL 6 CORE) ---
 
     no_trade = False
 
-    # weak market penalty
+# weak market penalty
     if strength == "Weak ⚠️":
         confidence -= 15
 
-    # low volatility penalty
+# low volatility penalty
     if volatility < 30:
         confidence -= 10
 
-    # risky conditions
+# risky conditions
     if strength == "Weak ⚠️" and volatility < 35:
         no_trade = True
 
-    # confidence floor
+# confidence floor
     if confidence < 50:
         confidence = 50
 
-    # --- reasoning system ---
+# --- reasoning system ---
     if no_trade:
         reason = "Weak market conditions detected. Waiting is safer."
 
