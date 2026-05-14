@@ -1,4 +1,6 @@
 import os
+from flask import Flask, request
+import threading
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -321,6 +323,15 @@ web = Flask(__name__)
 @web.route('/')
 def home():
     return "Bot is running!"
+
+@web.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.json
+
+    print("TradingView Alert Received:")
+    print(data)
+
+    return {"status": "success"}, 200
 
 def run_web():
     web.run(host="0.0.0.0", port=10000)
