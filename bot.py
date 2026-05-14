@@ -151,7 +151,7 @@ else:
 pair = random.choice(pairs)
 if "OTC" in pair:
         market_type = "OTC ⚡"
-    else:
+else:
         market_type = "Forex 📈"
 
     trend = random.choice(["Bullish 📈", "Bearish 📉"])
