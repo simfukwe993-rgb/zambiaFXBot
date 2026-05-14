@@ -149,14 +149,15 @@ else:
     pairs = forex_pairs + otc_pairs
 
 pair = random.choice(pairs)
+
 if "OTC" in pair:
-        market_type = "OTC ⚡"
+    market_type = "OTC ⚡"
 else:
-        market_type = "Forex 📈"
+    market_type = "Forex 📈"
 
 trend = random.choice(["Bullish 📈", "Bearish 📉"])
 
-    rsi = random.randint(10, 90)
+rsi = random.randint(10, 90)
 
     strength = random.choice([
         "Weak ⚠️",
