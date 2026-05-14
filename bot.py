@@ -39,18 +39,27 @@ async def risk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # --- SESSION COMMAND ---
 async def session(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    from datetime import datetime
+    from datetime import datetime, timezone, timedelta
 
-    now = datetime.now()
-    current_hour = now.hour
-    current_minute = now.minute
+zambia_time = datetime.now(timezone(timedelta(hours=2)))
+weekday = zambia_time.weekday()
 
-    if (current_hour > 22 or (current_hour == 22 and current_minute >= 30)) or current_hour <= 6:
-        market_session = "Night / OTC Mode ⚡"
-        advice = "Normal Forex may be closed or inactive. Focus more on OTC pairs."
-    else:
-        market_session = "Day / Forex + OTC Mode 📈"
-        advice = "Forex pairs and OTC pairs can both be considered."
+current_hour = zambia_time.hour
+current_minute = zambia_time.minute
+
+is_weekend = weekday >= 5
+
+if is_weekend:
+    market_session = "Weekend / OTC Mode ⚡"
+    advice = "Forex market is closed. Focus on OTC pairs only."
+
+elif (current_hour > 22 or (current_hour == 22 and current_minute >= 30)) or current_hour <= 6:
+    market_session = "Night / OTC Mode ⚡"
+    advice = "Normal Forex may be inactive. Focus more on OTC pairs."
+
+else:
+    market_session = "Day / Forex + OTC Mode 📈"
+    advice = "Forex pairs and OTC pairs can both be considered."
 
     await update.message.reply_text(
         f"🕒 CURRENT MARKET SESSION\n\n"
