@@ -149,7 +149,7 @@ else:
     pairs = forex_pairs + otc_pairs
 
 pair = random.choice(pairs)
-    if "OTC" in pair:
+if "OTC" in pair:
         market_type = "OTC ⚡"
     else:
         market_type = "Forex 📈"
