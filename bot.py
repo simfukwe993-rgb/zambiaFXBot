@@ -154,7 +154,7 @@ if "OTC" in pair:
 else:
         market_type = "Forex 📈"
 
-    trend = random.choice(["Bullish 📈", "Bearish 📉"])
+trend = random.choice(["Bullish 📈", "Bearish 📉"])
 
     rsi = random.randint(10, 90)
 
