@@ -159,11 +159,11 @@ trend = random.choice(["Bullish 📈", "Bearish 📉"])
 
 rsi = random.randint(10, 90)
 
-    strength = random.choice([
+strength = random.choice([
         "Weak ⚠️",
         "Moderate 📊",
         "Strong 💪"
-    ])
+])
 
     # --- adaptive timeframe logic ---
     if volatility >= 80:
