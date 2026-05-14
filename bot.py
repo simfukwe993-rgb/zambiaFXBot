@@ -127,8 +127,28 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "AUD/JPY OTC"
     ]
 
+    from datetime import datetime, timezone, timedelta
+
+zambia_time = datetime.now(timezone(timedelta(hours=2)))
+weekday = zambia_time.weekday()
+current_hour = zambia_time.hour
+current_minute = zambia_time.minute
+
+is_weekend = weekday >= 5
+
+if is_weekend:
+    market_session = "Weekend / OTC Mode ⚡"
+    pairs = otc_pairs
+
+elif (current_hour > 22 or (current_hour == 22 and current_minute >= 30)) or current_hour <= 6:
+    market_session = "Night / OTC Mode ⚡"
+    pairs = otc_pairs
+
+else:
+    market_session = "Day / Forex + OTC Mode 📈"
     pairs = forex_pairs + otc_pairs
-    pair = random.choice(pairs)
+
+pair = random.choice(pairs)
     if "OTC" in pair:
         market_type = "OTC ⚡"
     else:
@@ -203,6 +223,7 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"⚠️ NO TRADE RECOMMENDED\n\n"
             f"Pair: {pair}\n"
             f"Market Type: {market_type}\n"
+            f"Session: {market_session}\n"
             f"Trend: {trend}\n"
             f"RSI: {rsi} ({rsi_state})\n"
             f"Market Strength: {strength}\n"
