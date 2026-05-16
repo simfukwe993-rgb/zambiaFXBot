@@ -220,20 +220,19 @@ else:
         confidence = 50
 
 # --- reasoning system ---
-    if no_trade:
-        reason = "Weak market conditions detected. Waiting is safer."
-
-        await update.message.reply_text(
-            f"⚠️ NO TRADE RECOMMENDED\n\n"
-            f"Pair: {pair}\n"
-            f"Market Type: {market_type}\n"
-            f"Session: {market_session}\n"
-            f"Trend: {trend}\n"
-            f"RSI: {rsi} ({rsi_state})\n"
-            f"Market Strength: {strength}\n"
-            f"Volatility: {volatility}/100\n\n"
-            f"🧠 Reason: {reason}"
-        )
+   if no_trade:
+    reason = "Weak market conditions detected. Waiting is safer."
+    await update.message.reply_text(
+        f"⚠️ NO TRADE RECOMMENDED\n\n"
+        f"Pair: {pair}\n"
+        f"Market Type: {market_type}\n"
+        f"Session: {market_session}\n"
+        f"Trend: {trend}\n"
+        f"RSI: {rsi} ({rsi_state})\n"
+        f"Market Strength: {strength}\n"
+        f"Volatility: {volatility}/100\n\n"
+        f"🧠 Reason: {reason}"
+    )
 
     else:
 
