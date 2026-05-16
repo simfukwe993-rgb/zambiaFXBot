@@ -88,215 +88,129 @@ async def otc(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 # --- SIGNAL COMMAND ---
-import random
-
 async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-    volatility = random.randint(20, 100)
+    import random
+    from datetime import datetime, timezone, timedelta
 
     forex_pairs = [
-        "EUR/USD",
-        "GBP/USD",
-        "USD/JPY",
-        "AUD/USD",
-        "USD/CAD",
-        "NZD/USD",
-        "USD/CHF",
-        "EUR/JPY",
-        "GBP/JPY",
-        "AUD/JPY",
-        "CAD/JPY",
-        "CHF/JPY",
-        "EUR/GBP",
-        "EUR/CHF",
-        "GBP/CHF",
-        "AUD/CAD",
-        "AUD/CHF",
-        "NZD/JPY"
+        "EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "USD/CAD",
+        "NZD/USD", "USD/CHF", "EUR/JPY", "GBP/JPY", "AUD/JPY",
+        "CAD/JPY", "CHF/JPY", "EUR/GBP", "EUR/CHF", "GBP/CHF",
+        "AUD/CAD", "AUD/CHF", "NZD/JPY"
     ]
 
     otc_pairs = [
-        "EUR/USD OTC",
-        "GBP/USD OTC",
-        "USD/JPY OTC",
-        "AUD/USD OTC",
-        "USD/CHF OTC",
-        "EUR/JPY OTC",
-        "GBP/JPY OTC",
-        "EUR/GBP OTC",
+        "EUR/USD OTC", "GBP/USD OTC", "USD/JPY OTC", "AUD/USD OTC",
+        "USD/CHF OTC", "EUR/JPY OTC", "GBP/JPY OTC", "EUR/GBP OTC",
         "AUD/JPY OTC"
     ]
 
-    from datetime import datetime, timezone, timedelta
+    zambia_time = datetime.now(timezone(timedelta(hours=2)))
+    weekday = zambia_time.weekday()
+    current_hour = zambia_time.hour
+    current_minute = zambia_time.minute
 
-zambia_time = datetime.now(timezone(timedelta(hours=2)))
-weekday = zambia_time.weekday()
-current_hour = zambia_time.hour
-current_minute = zambia_time.minute
+    is_weekend = weekday >= 5
 
-is_weekend = weekday >= 5
+    if is_weekend:
+        market_session = "Weekend / OTC Mode ⚡"
+        pairs = otc_pairs
+    elif (current_hour > 22 or (current_hour == 22 and current_minute >= 30)) or current_hour <= 6:
+        market_session = "Night / OTC Mode ⚡"
+        pairs = otc_pairs
+    else:
+        market_session = "Day / Forex + OTC Mode 📈"
+        pairs = forex_pairs + otc_pairs
 
-if is_weekend:
-    market_session = "Weekend / OTC Mode ⚡"
-    pairs = otc_pairs
+    pair = random.choice(pairs)
 
-elif (current_hour > 22 or (current_hour == 22 and current_minute >= 30)) or current_hour <= 6:
-    market_session = "Night / OTC Mode ⚡"
-    pairs = otc_pairs
+    if "OTC" in pair:
+        market_type = "OTC ⚡"
+    else:
+        market_type = "Forex 📈"
 
-else:
-    market_session = "Day / Forex + OTC Mode 📈"
-    pairs = forex_pairs + otc_pairs
+    trend = random.choice(["Bullish 📈", "Bearish 📉"])
+    rsi = random.randint(10, 90)
+    volatility = random.randint(30, 100)
+    strength = random.choice(["Weak ⚠️", "Moderate 📊", "Strong 💪"])
 
-pair = random.choice(pairs)
+    if rsi <= 30:
+        rsi_state = "Oversold"
+    elif rsi >= 70:
+        rsi_state = "Overbought"
+    else:
+        rsi_state = "Neutral"
 
-if "OTC" in pair:
-    market_type = "OTC ⚡"
-else:
-    market_type = "Forex 📈"
+    if volatility >= 80:
+        timeframe = "1–3 min"
+        confidence = random.randint(60, 72)
+    elif volatility >= 60:
+        timeframe = "3–5 min"
+        confidence = random.randint(70, 80)
+    elif volatility >= 40:
+        timeframe = "5–10 min"
+        confidence = random.randint(78, 86)
+    else:
+        timeframe = "10–15 min"
+        confidence = random.randint(82, 92)
 
-trend = random.choice(["Bullish 📈", "Bearish 📉"])
+    direction = "BUY ↑" if "Bullish" in trend else "SELL ↓"
 
-rsi = random.randint(10, 90)
+    reason = "Market momentum and trend alignment."
+    signal_quality = "Normal Setup 📊"
 
-strength = random.choice([
-        "Weak ⚠️",
-        "Moderate 📊",
-        "Strong 💪"
-])
-strength = random.choice([
-    "Weak ⚠️",
-    "Moderate 📊",
-    "Strong 💪"
-])
-
-volatility = random.randint(30, 100)
-
-# --- adaptive timeframe logic ---
-if volatility >= 80:
-    timeframe = "1-3 min"
-    confidence = random.randint(60, 72)
-
-elif volatility >= 60:
-    timeframe = "3-5 min"
-    confidence = random.randint(70, 80)
-
-elif volatility >= 40:
-    timeframe = "5-10 min"
-    confidence = random.randint(78, 86)
-    
-# --- RSI logic ---
-if rsi <= 30:
-    rsi_state = "Oversold"
-elif rsi >= 70:
-     rsi_state = "Overbought"
-else:
-    rsi_state = "Neutral"
-
-# --- trend direction ---
-if trend == "Bullish 📈":
-    direction = "BUY ↑"
-else:
-    direction = "SELL ↓"
-
-# --- FILTER SYSTEM (NEW LEVEL 6 CORE) ---
-
-    no_trade = False
-
-# weak market penalty
-    if strength == "Weak ⚠️":
-        confidence -= 15
-
-# low volatility penalty
-    if volatility < 30:
+    if "Bullish" in trend and rsi_state == "Overbought":
+        signal_quality = "Conflict Risk ⚠️"
+        reason = "Conflict detected: bullish trend but RSI is overbought. Pullback risk."
         confidence -= 10
 
-# risky conditions
-    if strength == "Weak ⚠️" and volatility < 35:
-        no_trade = True
+    elif "Bearish" in trend and rsi_state == "Oversold":
+        signal_quality = "Conflict Risk ⚠️"
+        reason = "Conflict detected: bearish trend but RSI is oversold. Reversal risk."
+        confidence -= 10
 
-# confidence floor
+    elif "Bullish" in trend and rsi_state == "Oversold":
+        signal_quality = "Strong Alignment ✅"
+        reason = "Bullish trend + oversold RSI support a BUY reversal."
+        confidence += 8
+
+    elif "Bearish" in trend and rsi_state == "Overbought":
+        signal_quality = "Strong Alignment ✅"
+        reason = "Bearish trend + overbought RSI support a SELL reversal."
+        confidence += 8
+
     if confidence < 50:
         confidence = 50
 
-# --- reasoning system ---
-  if no_trade:
-        reason = "Weak market conditions detected. Waiting is safer."
-
+    if strength == "Weak ⚠️" and confidence < 60:
         await update.message.reply_text(
-             f"⚠️ NO TRADE RECOMMENDED\n\n"
-             f"Pair: {pair}\n"
-             f"Market Type: {market_type}\n"
-             f"Session: {market_session}\n"
-             f"Trend: {trend}\n"
-             f"RSI: {rsi} ({rsi_state})\n"
-             f"Market Strength: {strength}\n"
-             f"Volatility: {volatility}/100\n\n"
-             f"🧠 Reason: {reason}"
-    )
-
-    else:
-
-        # --- ALIGNMENT / CONFLICT ENGINE ---
-
-        conflict = False
-        alignment = False
-
-        if trend == "Bullish 📈" and rsi_state == "Oversold":
-            alignment = True
-            direction = "BUY ↑"
-            confidence += 8
-            reason = "Bullish trend + oversold RSI support a BUY reversal"
-
-        elif trend == "Bearish 📉" and rsi_state == "Overbought":
-            alignment = True
-            direction = "SELL ↓"
-            confidence += 8
-            reason = "Bearish trend + overbought RSI support a SELL reversal"
-
-        elif trend == "Bearish 📉" and rsi_state == "Oversold":
-            conflict = True
-            confidence -= 18
-            reason = "Conflict detected: bearish trend but RSI is oversold. Reversal risk."
-
-        elif trend == "Bullish 📈" and rsi_state == "Overbought":
-            conflict = True
-            confidence -= 18
-            reason = "Conflict detected: bullish trend but RSI is overbought. Pullback risk."
-
-        else:
-            reason = "Market momentum and trend alignment"
-
-        if strength == "Weak ⚠️":
-            confidence -= 10
-
-        if volatility < 30:
-            confidence -= 8
-
-        if conflict and confidence < 70:
-            no_trade = True
-
-        if confidence < 50:
-            confidence = 50
-
-        if confidence > 95:
-            confidence = 95
-
-
-        await update.message.reply_text(
-            f"📊 LEVEL 6 SIGNAL\n\n"
+            f"⚠️ NO TRADE RECOMMENDED\n\n"
             f"Pair: {pair}\n"
             f"Market Type: {market_type}\n"
+            f"Session: {market_session}\n"
             f"Trend: {trend}\n"
             f"RSI: {rsi} ({rsi_state})\n"
             f"Market Strength: {strength}\n"
-            f"Direction: {direction}\n"
-            f"Timeframe: {timeframe}\n"
-            f"Volatility: {volatility}/100\n"
-            f"Confidence: {confidence}%\n\n"
-            f"Signal Quality: {'Strong Alignment ✅' if alignment else 'Conflict Risk ⚠️' if conflict else 'Normal Setup 📊'}\n"
-            f"🧠 Reason: {reason}"
+            f"Volatility: {volatility}/100\n\n"
+            f"🧠 Reason: Weak market conditions detected. Waiting is safer."
         )
+        return
+
+    await update.message.reply_text(
+        f"📊 LEVEL 6 SIGNAL\n\n"
+        f"Pair: {pair}\n"
+        f"Market Type: {market_type}\n"
+        f"Session: {market_session}\n"
+        f"Trend: {trend}\n"
+        f"RSI: {rsi} ({rsi_state})\n"
+        f"Market Strength: {strength}\n"
+        f"Direction: {direction}\n"
+        f"Timeframe: {timeframe}\n"
+        f"Volatility: {volatility}/100\n"
+        f"Confidence: {confidence}%\n\n"
+        f"Signal Quality: {signal_quality}\n"
+        f"🧠 Reason: {reason}"
+    )
 async def news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "📰 Market News:\n\n"
