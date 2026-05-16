@@ -153,7 +153,7 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         timeframe = "10–15 min"
         confidence = random.randint(82, 92)
-            if timeframe == "1–3 min":
+    if timeframe == "1–3 min":
         trade_time = "2 min"
         candle_time = "30 sec candles"
 
