@@ -276,4 +276,6 @@ def run_web():
     web.run(host="0.0.0.0", port=10000)
 
 Thread(target=run_web).start()
+
+print("Telegram bot polling started...")
 app.run_polling(drop_pending_updates=True)
