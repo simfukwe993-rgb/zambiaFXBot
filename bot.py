@@ -153,6 +153,21 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         timeframe = "10–15 min"
         confidence = random.randint(82, 92)
+            if timeframe == "1–3 min":
+        trade_time = "2 min"
+        candle_time = "30 sec candles"
+
+    elif timeframe == "3–5 min":
+        trade_time = "4 min"
+        candle_time = "1 min candles"
+
+    elif timeframe == "5–10 min":
+        trade_time = "7 min"
+        candle_time = "1 min or 2 min candles"
+
+    else:
+        trade_time = "12 min"
+        candle_time = "2 min or 5 min candles"
 
     direction = "BUY ↑" if "Bullish" in trend else "SELL ↓"
 
@@ -206,6 +221,8 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"Market Strength: {strength}\n"
         f"Direction: {direction}\n"
         f"Timeframe: {timeframe}\n"
+        f"Recommended Trade Time: {trade_time}\n"
+        f"Candle Timeframe: {candle_time}\n"
         f"Volatility: {volatility}/100\n"
         f"Confidence: {confidence}%\n\n"
         f"Signal Quality: {signal_quality}\n"
