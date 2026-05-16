@@ -182,7 +182,7 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if confidence < 50:
         confidence = 50
 
-    if strength == "Weak ⚠️" and confidence < 60:
+    if strength == "Weak ⚠️":
         await update.message.reply_text(
             f"⚠️ NO TRADE RECOMMENDED\n\n"
             f"Pair: {pair}\n"
