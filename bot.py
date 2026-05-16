@@ -222,7 +222,6 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"Direction: {direction}\n"
         f"Timeframe: {timeframe}\n"
         f"Recommended Trade Time: {trade_time}\n"
-        f"Candle Timeframe: {candle_time}\n"
         f"Volatility: {volatility}/100\n"
         f"Confidence: {confidence}%\n\n"
         f"Signal Quality: {signal_quality}\n"
