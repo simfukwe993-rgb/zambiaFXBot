@@ -130,6 +130,8 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         market_type = "Forex 📈"
 
     trend = random.choice(["Bullish 📈", "Bearish 📉"])
+    bullish_candle = random.choice([True, False])
+    bearish_candle = not bullish_candle
     rsi = random.randint(10, 90)
     volatility = random.randint(30, 100)
     strength = random.choice(["Weak ⚠️", "Moderate 📊", "Strong 💪"])
@@ -179,12 +181,12 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reason = "Conflict detected: bullish trend but RSI is overbought. Pullback risk."
         confidence -= 10
 
-    elif "Bearish" in trend and rsi_state == "Oversold":
+    elif "Bearish" in trend and rsi_state == "Overbought" and bearish_candle:
         signal_quality = "Conflict Risk ⚠️"
         reason = "Conflict detected: bearish trend but RSI is oversold. Reversal risk."
         confidence -= 10
 
-    elif "Bullish" in trend and rsi_state == "Oversold":
+    elif "Bullish" in trend and rsi_state == "Oversold" and bullish_candle:
         signal_quality = "Strong Alignment ✅"
         reason = "Bullish trend + oversold RSI support a BUY reversal."
         confidence += 8
@@ -220,6 +222,7 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"Trend: {trend}\n"
         f"RSI: {rsi} ({rsi_state})\n"
         f"Market Strength: {strength}\n"
+        f"Candle Confirmation: {'Bullish ✅' if bullish_candle else 'Bearish ✅'}\n"
         f"Direction: {direction}\n"
         f"Timeframe: {timeframe}\n"
         f"Recommended Trade Time: {trade_time}\n"
