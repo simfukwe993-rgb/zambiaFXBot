@@ -206,6 +206,7 @@ async def signal(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"Trend: {trend}\n"
             f"RSI: {rsi} ({rsi_state})\n"
             f"Market Strength: {strength}\n"
+            f"Signal Quality: {signal_quality}\n"
             f"Volatility: {volatility}/100\n\n"
             f"🧠 Reason: Weak market conditions detected. Waiting is safer."
         )
